@@ -4,6 +4,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import telegram
 import sys
+import json # Added this line
 
 # --- Constants ---
 GOOGLE_SHEET_NAME = 'Vocabulary'  # Name of your Google Sheet
@@ -22,7 +23,7 @@ def get_google_sheet():
         if not GOOGLE_CREDENTIALS_JSON:
             raise ValueError("GOOGLE_CREDENTIALS_JSON environment variable not set.")
             
-        creds_dict = eval(GOOGLE_CREDENTIALS_JSON)
+        creds_dict = json.loads(GOOGLE_CREDENTIALS_JSON) # Changed eval() to json.loads()
         creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
         sheet = client.open(GOOGLE_SHEET_NAME).sheet1
