@@ -115,7 +115,7 @@ jobs:
         run: python main.py quiz
 
       - name: Upload quiz data
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quiz-data
           path: quiz_data.json
@@ -141,7 +141,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Download quiz data
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: quiz-data
 
