@@ -77,7 +77,7 @@ async def send_daily_words():
 
     for chat_id in TELEGRAM_CHAT_IDS:
         if chat_id:
-            send_telegram_message(bot, chat_id, message)
+            await send_telegram_message(bot, chat_id, message)
 
     # Update the tracker
     with open(SENT_WORDS_TRACKER_FILE, 'w') as f:
