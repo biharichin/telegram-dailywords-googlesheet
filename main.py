@@ -200,7 +200,7 @@ def generate_quiz(words_for_quiz):
 
     return quiz_questions, quiz_answers
 
-async def send_quiz():
+async def send_quiz(force_run=False):
     """Generates and sends a quiz based on recently learned words."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_IDS:
         print("Telegram token or chat IDs are not set.")
@@ -221,18 +221,23 @@ async def send_quiz():
     today = datetime.datetime.now().weekday() # Monday is 0, Sunday is 6
     words_for_quiz = []
 
-    if today == 0: # Monday quiz: Sat, Sun, Mon (3 days * 3 words/day = 9 words)
+    if not force_run:
+        if today == 0: # Monday quiz: Sat, Sun, Mon (3 days * 3 words/day = 9 words)
+            start_quiz_index = max(0, last_sent_index - 9)
+            words_for_quiz = all_words[start_quiz_index:last_sent_index]
+        elif today == 2: # Wednesday quiz: Tue, Wed (2 days * 3 words/day = 6 words)
+            start_quiz_index = max(0, last_sent_index - 6)
+            words_for_quiz = all_words[start_quiz_index:last_sent_index]
+        elif today == 4: # Friday quiz: Thu, Fri (2 days * 3 words/day = 6 words)
+            start_quiz_index = max(0, last_sent_index - 6)
+            words_for_quiz = all_words[start_quiz_index:last_sent_index]
+        else:
+            print("Not a quiz day.")
+            return
+    else: # force_run is True, so get words for quiz regardless of day
+        # For forced runs, let's just take the last 9 words for a decent quiz size
         start_quiz_index = max(0, last_sent_index - 9)
         words_for_quiz = all_words[start_quiz_index:last_sent_index]
-    elif today == 2: # Wednesday quiz: Tue, Wed (2 days * 3 words/day = 6 words)
-        start_quiz_index = max(0, last_sent_index - 6)
-        words_for_quiz = all_words[start_quiz_index:last_sent_index]
-    elif today == 4: # Friday quiz: Thu, Fri (2 days * 3 words/day = 6 words)
-        start_quiz_index = max(0, last_sent_index - 6)
-        words_for_quiz = all_words[start_quiz_index:last_sent_index]
-    else:
-        print("Not a quiz day.")
-        return
 
     if not words_for_quiz:
         print("Not enough words to generate a quiz.")
@@ -292,7 +297,7 @@ if __name__ == "__main__":
         elif sys.argv[1] == 'weekly_summary':
             asyncio.run(send_weekly_summary())
         elif sys.argv[1] == 'quiz':
-            asyncio.run(send_quiz())
+            asyncio.run(send_quiz(force_run=True))
         elif sys.argv[1] == 'quiz_answers':
             asyncio.run(send_quiz_answers())
     else:
