@@ -7,7 +7,7 @@ import sys
 import json # Added this line
 
 # --- Constants ---
-GOOGLE_SHEET_NAME = 'Vocabulary'  # Name of your Google Sheet
+GOOGLE_SHEET_NAME = 'english vocab'  # Name of your Google Sheet
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_IDS = os.environ.get('TELEGRAM_CHAT_IDS', '').split(',')
 SENT_WORDS_TRACKER_FILE = 'sent_words_tracker.txt'
