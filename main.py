@@ -115,7 +115,7 @@ async def send_weekly_summary():
                 f"*Antonyms:* {word['Antonyms']}\n"
                 f"*Example:* {word['Example Sentence']}"
             )
-            message_parts.append(f"\n---\n\n{word_entry}")
+            message_parts.append(f"\n---\n\n*{i+1}.* {word_entry}")
         message = "\n".join(message_parts)
 
     for chat_id in TELEGRAM_CHAT_IDS:
