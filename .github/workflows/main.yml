@@ -2,6 +2,18 @@ name: Vocabulary Bot
 
 on:
   workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: 'Select job to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'daily_words_job'
+          - 'weekly_summary_job'
+          - 'quiz_job'
+          - 'quiz_answers_job'
   schedule:
     # Schedule for daily words (7:00 AM IST is 1:30 AM UTC)
     - cron: '30 1 * * *'
