@@ -114,6 +114,12 @@ jobs:
           GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
         run: python main.py quiz
 
+      - name: Upload quiz data
+        uses: actions/upload-artifact@v3
+        with:
+          name: quiz-data
+          path: quiz_data.json
+
   quiz_answers_job:
     runs-on: ubuntu-latest
     permissions:
@@ -133,6 +139,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Download quiz data
+        uses: actions/download-artifact@v3
+        with:
+          name: quiz-data
 
       - name: Run quiz answers script
         env:
