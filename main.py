@@ -64,7 +64,7 @@ async def send_daily_words():
         message = "No new words to send today!"
     else:
         message_parts = []
-        for word in new_words:
+        for i, word in enumerate(new_words):
             word_entry = (
                 f"*Word:* {word['Word']}\n"
                 f"*Meaning:* {word['Meaning']}\n"
@@ -72,7 +72,7 @@ async def send_daily_words():
                 f"*Antonyms:* {word['Antonyms']}\n"
                 f"*Example:* {word['Example Sentence']}"
             )
-            message_parts.append(word_entry)
+            message_parts.append(f"*{i+1}.* {word_entry}")
         message = "\n\n---\n\n".join(message_parts)
 
     for chat_id in TELEGRAM_CHAT_IDS:
