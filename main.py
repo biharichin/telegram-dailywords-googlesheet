@@ -72,7 +72,7 @@ async def send_daily_words():
                 f"*Antonyms:* {word['Antonyms']}\n"
                 f"*Example:* {word['Example Sentence']}"
             )
-            message_parts.append(f"*{i+1}.* {word_entry}")
+            message_parts.append(f"*{last_sent_index + i + 1}.* {word_entry}")
         message = "\n\n---\n\n".join(message_parts)
 
     for chat_id in TELEGRAM_CHAT_IDS:
