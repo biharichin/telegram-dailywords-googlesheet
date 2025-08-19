@@ -83,12 +83,46 @@ async def send_daily_words():
     with open(SENT_WORDS_TRACKER_FILE, 'w') as f:
         f.write(str(last_sent_index + len(new_words)))
 
+async def send_weekly_summary():
+    """Fetches and sends a summary of the last 21 words learned."""
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_IDS:
+        print("Telegram token or chat IDs are not set.")
+        return
+
+    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+    sheet = get_google_sheet()
+    words = sheet.get_all_records()
+
+    try:
+        with open(SENT_WORDS_TRACKER_FILE, 'r') as f:
+            last_sent_index = int(f.read().strip())
+    except FileNotFoundError:
+        last_sent_index = 0
+
+    # Calculate the range for the last 21 words (3 words/day * 7 days)
+    start_index = max(0, last_sent_index - 21)
+    summary_words = words[start_index:last_sent_index]
+
+    if not summary_words:
+        message = "No words learned this week yet for a summary."
+    else:
+        message_parts = ["*Weekly Vocabulary Summary:*"]
+        for i, word in enumerate(summary_words):
+            message_parts.append(f"{i+1}. *{word['Word']}:* {word['Meaning']}")
+        message = "\n".join(message_parts)
+
+    for chat_id in TELEGRAM_CHAT_IDS:
+        if chat_id:
+            await send_telegram_message(bot, chat_id, message)
+
 if __name__ == "__main__":
     # This allows us to run different functions based on arguments
     # We will use this in our GitHub Actions workflow
     if len(sys.argv) > 1:
         if sys.argv[1] == 'daily_words':
             asyncio.run(send_daily_words())
-        # Add other functions like 'weekly_summary' and 'quiz' here later
+        elif sys.argv[1] == 'weekly_summary':
+            asyncio.run(send_weekly_summary())
+        # Add other functions like 'quiz' here later
     else:
         print("No task specified.")
