@@ -108,7 +108,14 @@ async def send_weekly_summary():
     else:
         message_parts = ["*Weekly Vocabulary Summary:*"]
         for i, word in enumerate(summary_words):
-            message_parts.append(f"{i+1}. *{word['Word']}:* {word['Meaning']}")
+            word_entry = (
+                f"*Word:* {word['Word']}\n"
+                f"*Meaning:* {word['Meaning']}\n"
+                f"*Synonyms:* {word['Synonyms']}\n"
+                f"*Antonyms:* {word['Antonyms']}\n"
+                f"*Example:* {word['Example Sentence']}"
+            )
+            message_parts.append(f"\n---\n\n{word_entry}")
         message = "\n".join(message_parts)
 
     for chat_id in TELEGRAM_CHAT_IDS:
