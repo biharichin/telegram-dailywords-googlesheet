@@ -4,7 +4,8 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import telegram
 import sys
-import json # Added this line
+import json
+import asyncio # Added this line
 
 # --- Constants ---
 GOOGLE_SHEET_NAME = 'english vocab'  # Name of your Google Sheet
@@ -33,15 +34,15 @@ def get_google_sheet():
         sys.exit(1)
 
 # --- Telegram Bot ---
-def send_telegram_message(bot, chat_id, message):
+async def send_telegram_message(bot, chat_id, message):
     """Sends a message to a Telegram chat."""
     try:
-        bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.constants.ParseMode.MARKDOWN)
+        await bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.constants.ParseMode.MARKDOWN)
     except Exception as e:
         print(f"Error sending message to {chat_id}: {e}")
 
 # --- Core Logic ---
-def send_daily_words():
+async def send_daily_words():
     """Fetches and sends 3 new words to the Telegram chats."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_IDS:
         print("Telegram token or chat IDs are not set.")
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     # We will use this in our GitHub Actions workflow
     if len(sys.argv) > 1:
         if sys.argv[1] == 'daily_words':
-            send_daily_words()
+            asyncio.run(send_daily_words())
         # Add other functions like 'weekly_summary' and 'quiz' here later
     else:
         print("No task specified.")
