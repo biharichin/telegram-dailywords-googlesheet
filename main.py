@@ -36,7 +36,7 @@ def get_google_sheet():
 def send_telegram_message(bot, chat_id, message):
     """Sends a message to a Telegram chat."""
     try:
-        bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
+        bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.constants.ParseMode.MARKDOWN)
     except Exception as e:
         print(f"Error sending message to {chat_id}: {e}")
 
