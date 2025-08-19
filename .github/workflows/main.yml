@@ -2,6 +2,16 @@ name: Vocabulary Bot
 
 on:
   workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: 'Select job to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'daily_words_job'
+          - 'weekly_summary_job'
   schedule:
     # Schedule for daily words (7:00 AM IST is 1:30 AM UTC)
     - cron: '30 1 * * *'
@@ -13,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event.schedule == '30 1 * * *' # Run only on daily schedule
+    if: github.event.inputs.job_to_run == 'daily_words_job' || github.event.inputs.job_to_run == 'all' || github.event.schedule == '30 1 * * *' # Run only on daily schedule or if selected manually
 
     steps:
       - name: Checkout repository
@@ -48,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event.schedule == '30 3 * * 0' # Run only on weekly schedule
+    if: github.event.inputs.job_to_run == 'weekly_summary_job' || github.event.inputs.job_to_run == 'all' || github.event.schedule == '30 3 * * 0' # Run only on weekly schedule or if selected manually
 
     steps:
       - name: Checkout repository
