@@ -1,7 +1,7 @@
-
 name: Vocabulary Bot
 
 on:
+  workflow_dispatch:
   schedule:
     # Schedule for daily words (7:00 AM IST is 1:30 AM UTC)
     - cron: '30 1 * * *'
