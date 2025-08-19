@@ -255,7 +255,7 @@ async def send_quiz(force_run=False):
         if chat_id:
             await send_telegram_message(bot, chat_id, quiz_message)
 
-    # Save quiz answers for later
+    # Save quiz answers for later in persistent storage
     quiz_data = {
         "questions": quiz_questions,
         "answers": quiz_answers
